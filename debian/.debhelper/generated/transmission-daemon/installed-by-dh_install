@@ -1,0 +1,6 @@
+./debian/transmission-daemon.install
+debian/tmp/usr/lib/systemd/system/transmission-daemon.service
+./debian/README.json
+./debian/settings.json
+debian/tmp/usr/bin/transmission-daemon
+debian/tmp/usr/share/man/man1/transmission-daemon.1

@@ -1,0 +1,10 @@
+290b5e342da79d104cd9c720e4120f37  usr/bin/transmission-cli
+4463a15abe1d949241fabd6220f36993  usr/bin/transmission-create
+4fb074ea7a24b999c035121f5cfbeda7  usr/bin/transmission-edit
+0ad742cf79060f59740f5a56a2e9c290  usr/bin/transmission-remote
+b264e65def5e236811900004ca056559  usr/bin/transmission-show
+9b590c94d5c790bef5f2b69226ef7dd4  usr/share/man/man1/transmission-cli.1.gz
+f6c0b8c6dfffdcc598a7cff0b4e77819  usr/share/man/man1/transmission-create.1.gz
+854b29d4610af12e622eb80802391b48  usr/share/man/man1/transmission-edit.1.gz
+16c1b73bb714abdfb315a822e6755c52  usr/share/man/man1/transmission-remote.1.gz
+4fef9658ac8aaa45e2db5b4cc821c28b  usr/share/man/man1/transmission-show.1.gz

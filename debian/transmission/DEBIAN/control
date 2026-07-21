@@ -1,0 +1,17 @@
+Package: transmission
+Version: 4.1.3-0~local1
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 9
+Depends: transmission-common (= 4.1.3-0~local1), transmission-gtk (>= 4.1.3-0~local1) | transmission-qt (>= 4.1.3-0~local1) | transmission-cli (>= 4.1.3-0~local1)
+Section: net
+Priority: optional
+Homepage: https://transmissionbt.com/
+Description: lightweight BitTorrent client
+ Transmission is a set of lightweight BitTorrent clients (in GUI, CLI
+ and daemon form). All its incarnations feature a very simple, intuitive
+ interface on top on an efficient, cross-platform back-end.
+ .
+ This is just a metapackage depending on one of the front-end
+ alternatives
+Original-Maintainer: Sandro Tosi <morph@debian.org>

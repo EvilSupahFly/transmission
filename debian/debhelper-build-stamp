@@ -1,0 +1,6 @@
+transmission
+transmission-common
+transmission-cli
+transmission-gtk
+transmission-qt
+transmission-daemon

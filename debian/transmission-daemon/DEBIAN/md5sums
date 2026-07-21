@@ -1,0 +1,4 @@
+0efa43012f939f7265dde2ae2be656b1  debian/transmission-daemon.install
+283defae6e521d85415e42fa20efb507  usr/bin/transmission-daemon
+96fa343e0ec98f074f2e7b7e2f54b285  usr/lib/systemd/system/transmission-daemon.service
+a32da42298641ab68a1a2625ddba3d7e  usr/share/man/man1/transmission-daemon.1.gz

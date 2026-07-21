@@ -1,0 +1,4 @@
+usr/bin/transmission-qt
+usr/share/applications/transmission-qt.desktop
+usr/share/transmission/translations/*.qm
+usr/share/man/man1/transmission-qt.1

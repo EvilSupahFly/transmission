@@ -1,0 +1,14 @@
+Package: transmission-cli-dbgsym
+Package-Type: ddeb
+Source: transmission
+Version: 4.1.3-0~local1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 48327
+Depends: transmission-cli (= 4.1.3-0~local1)
+Section: debug
+Priority: optional
+Description: debug symbols for transmission-cli
+Build-Ids: 4e58ddd470497fd52705915a2147ec08a08a0749 9f96bc75e708efd518976e11bf1aeb9cb5e55f09 b121500bf4ee165d106d38aaa1d6f573f0116f58 c7d22f3de52732ad506c082516d2afe29ba29e3e f688f6794be97b22f727b181de0a1c194b871a41
+Original-Maintainer: Sandro Tosi <morph@debian.org>

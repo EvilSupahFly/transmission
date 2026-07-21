@@ -1,0 +1,17 @@
+Package: transmission-common
+Source: transmission
+Version: 4.1.3-0~local1
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 495
+Section: net
+Priority: optional
+Homepage: https://transmissionbt.com/
+Description: lightweight BitTorrent client (common files)
+ Transmission is a set of lightweight BitTorrent clients (in GUI, CLI
+ and daemon form). All its incarnations feature a very simple, intuitive
+ interface on top on an efficient, cross-platform back-end.
+ .
+ This package contains the common files for the different transmission
+ versions.
+Original-Maintainer: Sandro Tosi <morph@debian.org>

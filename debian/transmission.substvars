@@ -1,0 +1,2 @@
+misc:Depends=transmission-common (= ${binary:Version})
+misc:Pre-Depends=

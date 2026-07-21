@@ -1,0 +1,7 @@
+debian/tmp/usr/share/doc/transmission/AUTHORS
+debian/tmp/usr/share/doc/transmission/news
+debian/tmp/usr/share/doc/transmission/README.md
+debian/tmp/usr/share/doc/transmission/rpc-spec.md
+debian/tmp/usr/share/doc/transmission/send-email-when-torrent-done.sh
+debian/tmp/usr/share/icons
+debian/tmp/usr/share/transmission/public_html

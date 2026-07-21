@@ -1,0 +1,170 @@
+transmission (4.1.3-0~local1) unstable; urgency=medium
+
+  * New upstream release (4.0.5 → 4.1.3).
+
+ -- Seann Giffin <seann.giffin@gmail.com>  Mon, 20 Jul 2026 10:00:00 -0400
+
+transmission (4.0.5-1ubuntu0.1) noble-security; urgency=medium
+
+  * SECURITY UPDATE: clickjacking weakness in WebUI
+    - debian/patches/CVE-2026-38978.patch: fix: add clickjack safeguards when
+      serving http responses in libtransmission/rpc-server.cc.
+    - CVE-2026-38978
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 04 Jun 2026 09:37:03 -0400
+
+transmission (4.0.5-1build5) noble; urgency=medium
+
+  * No-change rebuild against libqt5core5t64 and libssl3t64.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 15 Apr 2024 20:00:51 +0100
+
+transmission (4.0.5-1build4) noble; urgency=medium
+
+  * No-change rebuild for CVE-2024-3094
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Sun, 31 Mar 2024 17:20:23 +0000
+
+transmission (4.0.5-1build3) noble; urgency=medium
+
+  * No-change rebuild against libcurl4t64
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Sat, 16 Mar 2024 07:05:55 +0000
+
+transmission (4.0.5-1build2) noble; urgency=medium
+
+  * No-change rebuild against libqt5core5t64
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Fri, 15 Mar 2024 07:19:08 +0000
+
+transmission (4.0.5-1build1) noble; urgency=medium
+
+  * No-change rebuild against libssl3t64
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Tue, 05 Mar 2024 02:07:29 +0000
+
+transmission (4.0.5-1) unstable; urgency=medium
+
+  [ Sandro Tosi ]
+  * New upstream release; Closes: #1040603, #1042027
+
+  [ Chris Boulton ]
+  * debian/control
+    - update transmission-cli long description; Closes: #1035869
+
+ -- Sandro Tosi <morph@debian.org>  Fri, 19 Jan 2024 02:04:27 -0500
+
+transmission (4.0.2-1) unstable; urgency=medium
+
+  * [7d7418a5] New upstream version 4.0.2
+  * [183b7e9b] chore(patches): drop groff fix; applied upstream
+
+ -- Leo Antunes <costela@debian.org>  Fri, 17 Mar 2023 20:26:37 +0100
+
+transmission (4.0.1-1) unstable; urgency=medium
+
+  [ Pino Toscano ]
+  * Drop menu files and their Debian-specific pixmaps, since transmission-gtk
+    & transmission-qt already provide .desktop files
+    - drop the lintian overrides related to them
+  * Ship the application pixmap in transmission-common.
+  * Copy the man pages using dh_install rather than dh_installmanpages, as they
+    are installed in the right location already by the upstream build system.
+  * Ship the AppStream metadata for transmission-gtk.
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on libevent-dev,
+      libminiupnpc-dev, libnatpmp-dev and libnotify-dev.
+    + transmission-common: Drop versioned constraint on transmission-gtk in
+      Replaces.
+    + transmission-common: Drop versioned constraint on transmission-gtk in
+      Breaks.
+    + transmission-cli: Drop versioned constraint on transmission-daemon in
+      Replaces.
+    + transmission-cli: Drop versioned constraint on transmission-daemon in
+      Breaks.
+    + transmission-daemon: Drop versioned constraint on lsb-base in Depends.
+    + transmission-daemon: Drop versioned constraint on transmission-cli in
+      Recommends.
+    + transmission-daemon: Drop versioned constraint on transmission-cli in
+      Replaces.
+    + transmission-daemon: Drop versioned constraint on transmission-cli in
+      Breaks.
+
+  [ Leo Antunes ]
+  * [4ce635f3] fix(watch): update github path
+  * [af4837c8] New upstream version 4.0.0
+  * [a8cce533] feat(rules): update for cmake
+  * [c9cfb739] chore: drop out-of-date patches
+  * [12303dea] chore: bump dh to 13
+  * [00fa1274] fix: update build-deps
+  * [d01ed004] fix: update rules to (re)enable features
+  * [9535e0b8] chore: drop upstart file
+  * [ce61a090] fix: update paths for newer debhelper
+  * [e674fa04] chore: add lintian-overrides for missing js source
+  * [603daf61] chore: update debian/copyright
+  * [9bda2fcb] chore: remove preinst fix for long EOL version
+
+  [ Barak A. Pearlmutter ]
+  * New upstream release; Closes: #1030857
+  * Trim trailing whitespace.
+  * Set upstream metadata fields: Bug-Database.
+  * Remove listed license files (third-party/libb64/LICENSE, web/LICENSE) from
+    copyright.
+  * Fix day-of-week for changelog entries 2.33-1, 1.40-5.
+  * Bump Standards-Version to 4.6.2
+  * Rules-Requires-Root: no
+  * Generate library package libtransmission
+  * Set up doc dir links using dh_installdocs --link-doc=transmission-common and
+    change packages transmission and transmisison-common from arch:all to
+    arch: any in order to allow documentation symbolic links.
+  * Daemon should suggest external remote client transmission-remote-gtk
+  * Generate libtransmission-dev static library package
+  * Remove dependency on obsolete package lsb-base
+  * Remove obsolete .menu files
+  * Harden
+  * Remove old debian/NEWS
+  * Add missing Pre-Depends: ${misc:Pre-Depends}
+  * Avoid duplication of email script
+  * Remove obsolete (now incorrect) transmission-common README.debian file
+
+ -- Leo Antunes <costela@debian.org>  Sat, 04 Mar 2023 23:12:23 +0100
+
+transmission (3.00-2.1) unstable; urgency=low
+
+  [ Steve Langasek ]
+  * debian/patches/openssl3-compat.patch: Compatibility with OpenSSL 3.
+    (Closes: #1006584)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sat, 21 May 2022 09:22:10 +0200
+
+transmission (3.00-2) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since stretch:
+    + Build-Depends: Drop versioned constraint on debhelper, intltool.
+
+  [ Sandro Tosi ]
+  * debian/patches/build_new_autoconf.patch
+    - fix build with autoconf 2.70, patch by Sebastien Bacher; Closes: #978911
+  * debian/control
+    - bump Standards-Version to 4.6.0.1 (no changes needed)
+
+ -- Sandro Tosi <morph@debian.org>  Sun, 19 Dec 2021 00:23:43 -0500
+
+transmission (3.00-1) unstable; urgency=medium
+
+  * New upstream release; Closes: #960362
+    - fix CVE-2018-10756; Closes: #961461
+  * debian/patches/*
+    - refresh, drop patches
+  * debian/copyright
+    - update upstream copyright info
+    - extend packaging copyright years
+  * New location for doc files
+
+ -- Sandro Tosi <morph@debian.org>  Thu, 28 May 2020 22:05:37 -0400
+
+# Older entries have been removed from this changelog.
+# To read the complete changelog use `apt changelog transmission-common`.

@@ -1,0 +1,5 @@
+debian/tmp/usr/bin/transmission-gtk
+debian/tmp/usr/share/applications/transmission-gtk.desktop
+debian/tmp/usr/share/locale
+debian/tmp/usr/share/metainfo
+debian/tmp/usr/share/man/man1/transmission-gtk.1

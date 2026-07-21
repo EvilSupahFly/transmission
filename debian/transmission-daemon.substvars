@@ -1,0 +1,3 @@
+misc:Depends=transmission-common (= ${binary:Version})
+misc:Pre-Depends=init-system-helpers (>= 1.54~)
+shlibs:Depends=libc6 (>= 2.38), libcurl3t64-gnutls (>= 7.28.0), libdeflate0 (>= 1.0), libevent-2.1-7t64 (>= 2.1.8-stable), libgcc-s1 (>= 3.4), libminiupnpc17 (>= 1.9.20140610), libnatpmp1t64 (>= 20150609), libpsl5t64 (>= 0.19.1), libssl3t64 (>= 3.0.0), libstdc++6 (>= 13.1), libsystemd0
