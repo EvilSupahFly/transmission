@@ -1,0 +1,103 @@
+name: Track upstream release and build .deb
+
+on:
+  schedule:
+    - cron: '0 6 1,15 * *'  # twice monthly (1st & 15th, 06:00 UTC) — matches release cadence
+  workflow_dispatch: {}      # lets you trigger a run manually to test
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-sync:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.check.outputs.new_version }}
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+      - name: Check latest upstream release
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          UPSTREAM_TAG=$(gh api repos/transmission/transmission/releases/latest --jq '.tag_name')
+          echo "Latest upstream tag: $UPSTREAM_TAG"
+
+          # Idempotency check: has this exact version already been built/released
+          # on our own fork? A GitHub Release with a matching tag name means yes.
+          if gh release view "$UPSTREAM_TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Already built $UPSTREAM_TAG — skipping."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "new_version=$UPSTREAM_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Sync fork's main from upstream (cosmetic — build doesn't depend on this)
+        # Deliberately NOT gated on should_build: this doubles as a low-effort keepalive.
+        # GitHub auto-disables scheduled workflows on a repo after 60 days with no commits
+        # (forks start with scheduled workflows disabled too, so enable it once manually
+        # after adding this file). Running the merge unconditionally means any upstream
+        # commit activity — not just tagged releases — resets that 60-day clock, since
+        # a genuine release lull longer than ~2 months would otherwise leave this repo
+        # dark and risk the schedule silently disabling itself.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=main
+
+  build:
+    needs: check-and-sync
+    if: needs.check-and-sync.outputs.should_build == 'true'
+    runs-on: ubuntu-24.04   # closest public match to Mint 22.3's package base
+    env:
+      DEBFULLNAME: "Seann Giffin"
+      DEBEMAIL: "seann.giffin@gmail.com"
+      NEW_VERSION: ${{ needs.check-and-sync.outputs.new_version }}
+    steps:
+      - name: Checkout upstream source at the release tag
+        uses: actions/checkout@v4
+        with:
+          repository: transmission/transmission
+          ref: ${{ env.NEW_VERSION }}
+          submodules: recursive
+          path: src
+
+      - name: Checkout persistent debian/ overlay
+        uses: actions/checkout@v4
+        with:
+          ref: debian-packaging
+          path: overlay
+
+      - name: Apply debian/ overlay onto the source tree
+        run: cp -r overlay/debian src/debian
+
+      - name: Install build tooling
+        run: |
+          sudo sed -i '/^# deb-src/s/^# //' /etc/apt/sources.list || true
+          sudo apt-get update
+          sudo apt-get install -y devscripts dpkg-dev equivs build-essential cmake
+
+      - name: Install package build-dependencies from debian/control
+        working-directory: src
+        run: sudo mk-build-deps -i -r debian/control
+
+      - name: Bump changelog for this release
+        working-directory: src
+        run: |
+          # Strip the 'v' from the version number, if present
+          VERSION_NUM="${NEW_VERSION#v}"
+          dch --newversion "${VERSION_NUM}-0~local1" --distribution unstable \
+            "Automated rebuild for upstream release ${NEW_VERSION}."
+
+      - name: Build the .deb packages
+        working-directory: src
+        run: dpkg-buildpackage -us -uc -b
+
+      - name: Publish build output as a GitHub Release on the fork
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${NEW_VERSION}" ./*.deb \
+            --repo "${{ github.repository }}" \
+            --title "transmission ${NEW_VERSION} (local Mint build)" \
+            --notes "Automated local .deb build for upstream release ${NEW_VERSION}."
