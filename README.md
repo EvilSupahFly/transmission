@@ -36,3 +36,10 @@ files attached - no need to build locally to use this.
 No need to remove any existing repo version first - since the local build's
 version number sorts higher, installing over it is a normal in-place upgrade; the
 package manager replaces the old files cleanly on its own.
+
+## Important note about this auto-build project
+
+Because Transmission itself isn't updated on a regular schedule, a `cron` gate is
+baked into the automation which checks upstream for updates on the 1st and 15th
+of each month. If there's a new version upstream, we build new packages. If not,
+we skip the build and wait for the next scheduled check.
