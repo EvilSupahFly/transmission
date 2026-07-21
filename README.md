@@ -1,0 +1,1 @@
+[![Track upstream release and build .deb](https://github.com/EvilSupahFly/transmission/actions/workflows/build-dep.yml/badge.svg)](https://github.com/EvilSupahFly/transmission/actions/workflows/build-dep.yml)
