@@ -17,25 +17,25 @@ files attached - no need to build locally to use this.
 
    **apt** (recommended - resolves dependencies across the whole batch of local
    files in one transaction):
-```bash
-   sudo apt install ./*.deb
-```
+    ```bash
+       sudo apt install ./*.deb
+    ```
 
-   **dpkg**, classic two-step (what this build was actually validated with):
-```bash
-   sudo dpkg -i *.deb
-   sudo apt-get install -f   # only if dpkg reports anything missing
-```
+    **dpkg**, classic two-step (what this build was actually validated with):
+    ```bash
+       sudo dpkg -i *.deb
+       sudo apt-get install -f   # only if dpkg reports anything missing
+    ```
 
-   **GDebi** - convenient for a single package via double-click, but its
-   dependency resolution checks your configured repos, not sibling files in the
-   same folder. If you're installing several of these local `.deb`s together,
-   install `transmission-common` first, then the rest - or just use `apt`/`dpkg`
-   above, which treat the whole folder as one batch.
+    **GDebi** - convenient for a single package via double-click, but its
+    dependency resolution checks your configured repos, not sibling files in the
+    same folder. If you're installing several of these local `.deb`s together,
+    install `transmission-common` first, then the rest - or just use `apt`/`dpkg`
+    above, which treat the whole folder as one batch.
 
-No need to remove any existing repo version first - since the local build's
-version number sorts higher, installing over it is a normal in-place upgrade; the
-package manager replaces the old files cleanly on its own.
+   No need to remove any existing repo version first - since the local build's
+   version number sorts higher, installing over it is a normal in-place upgrade; the
+   package manager replaces the old files cleanly on its own.
 
 ## Important note about this auto-build project
 
