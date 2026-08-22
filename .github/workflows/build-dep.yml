@@ -2,7 +2,7 @@ name: Track upstream release and build .deb
 
 on:
   schedule:
-    - cron: '0 6 1,15 * *'  # twice monthly (1st & 15th, 06:00 UTC) — matches release cadence
+    - cron: '0 6 1,15 * *'  # twice monthly (1st & 15th, 06:00 UTC) - matches release cadence
   workflow_dispatch: {}      # lets you trigger a run manually to test
 
 permissions:
@@ -26,19 +26,19 @@ jobs:
           # Idempotency check: has this exact version already been built/released
           # on our own fork? A GitHub Release with a matching tag name means yes.
           if gh release view "$UPSTREAM_TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
-            echo "Already built $UPSTREAM_TAG — skipping."
+            echo "Already built $UPSTREAM_TAG - skipping."
             echo "should_build=false" >> "$GITHUB_OUTPUT"
           else
             echo "should_build=true" >> "$GITHUB_OUTPUT"
           fi
           echo "new_version=$UPSTREAM_TAG" >> "$GITHUB_OUTPUT"
 
-      - name: Sync fork's main from upstream (cosmetic — build doesn't depend on this)
+      - name: Sync fork's main from upstream (cosmetic - build doesn't depend on this)
         # Deliberately NOT gated on should_build: this doubles as a low-effort keepalive.
         # GitHub auto-disables scheduled workflows on a repo after 60 days with no commits
         # (forks start with scheduled workflows disabled too, so enable it once manually
         # after adding this file). Running the merge unconditionally means any upstream
-        # commit activity — not just tagged releases — resets that 60-day clock, since
+        # commit activity - not just tagged releases - resets that 60-day clock, since
         # a genuine release lull longer than ~2 months would otherwise leave this repo
         # dark and risk the schedule silently disabling itself.
         env:
@@ -95,7 +95,7 @@ jobs:
 
       - name: Publish build output as a GitHub Release on the fork
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_WITH_WORKFLOWS }}
         run: |
           gh release create "${NEW_VERSION}" ./*.deb \
             --repo "${{ github.repository }}" \
