@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   check-and-sync:
@@ -43,7 +42,7 @@ jobs:
         # a genuine release lull longer than ~2 months would otherwise leave this repo
         # dark and risk the schedule silently disabling itself.
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_WITH_WORKFLOWS }}
         run: gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=main
 
   build:
