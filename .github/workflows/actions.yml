@@ -870,7 +870,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - version: oldoldstable
+          - version: bullseye
             gtk: gtk3
             qt: qt5
             use-legacy-packages: true
@@ -882,27 +882,41 @@ jobs:
             gtk: gtk4
             qt: qt6
             use-legacy-packages: false
+
     container:
       image: debian:${{ matrix.version }}-slim
+
     steps:
       - name: Show Configuration
         run: |
           echo '${{ toJSON(needs) }}'
           echo '${{ toJSON(runner) }}'
           cat /etc/os-release
-      - name: Warn if oldoldstable moved past Debian 11
-        if: ${{ matrix.version == 'oldoldstable' }}
+
+      - name: Configure archived Debian sources
+        if: ${{ matrix.use-legacy-packages }}
         run: |
-          . /etc/os-release
-          if [ "$VERSION_ID" != '11' ]; then
-            echo "::warning title=Debian oldoldstable changed::debian:oldoldstable currently resolves to Debian $VERSION_ID. Consider removing matrix.use-legacy-packages if legacy package workarounds are no longer needed."
-          fi
+          cat > /etc/apt/sources.list <<'EOF'
+          deb http://archive.debian.org/debian bullseye main
+          deb http://archive.debian.org/debian bullseye-updates main
+          deb http://archive.debian.org/debian-security bullseye-security main
+          EOF
+
+          # Debian slim images may contain a deb822 source file as well.
+          rm -f /etc/apt/sources.list.d/*
+
+          # Archived repositories have expired Valid-Until metadata.
+          printf '%s\n' \
+            'Acquire::Check-Valid-Until "false";' \
+            > /etc/apt/apt.conf.d/99archive
+
       - name: Get Composite Actions
         uses: actions/checkout@v6
         with:
           sparse-checkout: |
             .github/actions
           sparse-checkout-cone-mode: false
+
       - name: Get Dependencies
         uses: ./.github/actions/install-deps
         with:
@@ -1158,7 +1172,7 @@ jobs:
         gradle-version: 8.13
 
     - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+      uses: android-actions/setup-android@v4
 
     - name: Install NDK
       run: sdkmanager "ndk;27.3.13750724"
@@ -1472,6 +1486,7 @@ jobs:
         with:
           build-dir: obj
           build-config: RelWithDebInfo
+          parallel: 2
       - name: Install
         run: cmake --install obj --config RelWithDebInfo --strip
       - uses: actions/upload-artifact@v6
