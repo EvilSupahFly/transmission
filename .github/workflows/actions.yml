@@ -896,6 +896,12 @@ jobs:
       - name: Configure archived Debian sources
         if: ${{ matrix.use-legacy-packages }}
         run: |
+          set -eux
+
+          rm -f /etc/apt/sources.list
+          rm -f /etc/apt/sources.list.d/*
+          rm -rf /var/lib/apt/lists/*
+
           cat > /etc/apt/sources.list <<'EOF'
           deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20240531T143744Z bullseye main
           deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20240531T143744Z bullseye-updates main
@@ -904,7 +910,12 @@ jobs:
           # Debian slim images may contain a deb822 source file as well.
           rm -f /etc/apt/sources.list.d/*
 
-          # Archived repositories have expired Valid-Until metadata.
+          cat > /etc/apt/preferences.d/99bullseye-snapshot <<'EOF'
+          Package: *
+          Pin: release n=bullseye
+          Pin-Priority: 1001
+          EOF
+
           printf '%s\n' \
             'Acquire::Check-Valid-Until "false";' \
             > /etc/apt/apt.conf.d/99archive
