@@ -1,0 +1,65 @@
+name: Publish successful build artifacts
+
+on:
+  workflow_run:
+    workflows:
+      - Sanity
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    name: Publish all artifacts from the completed build
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+
+    steps:
+      - name: Download every artifact from the successful run
+        run: |
+          set -euo pipefail
+          mkdir -p downloaded-artifacts
+          gh run download "$RUN_ID" \
+            --repo "${{ github.repository }}" \
+            --dir downloaded-artifacts
+
+      - name: Bundle artifacts for release upload
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          shopt -s nullglob
+          artifact_dirs=(downloaded-artifacts/*)
+
+          if [ "${#artifact_dirs[@]}" -eq 0 ]; then
+            echo "The successful run produced no downloadable artifacts." >&2
+            exit 1
+          fi
+
+          for artifact in "${artifact_dirs[@]}"; do
+            name="$(basename "$artifact")"
+            if [ -d "$artifact" ]; then
+              tar -C downloaded-artifacts -czf "release-assets/${name}.tar.gz" "$name"
+            else
+              cp "$artifact" "release-assets/$name"
+            fi
+          done
+
+      - name: Create a release with all artifacts
+        run: |
+          set -euo pipefail
+          tag="build-${RUN_NUMBER}"
+          gh release create "$tag" release-assets/* \
+            --repo "${{ github.repository }}" \
+            --target "$HEAD_SHA" \
+            --title "Successful build ${RUN_NUMBER}" \
+            --notes "All workflow artifacts produced by the successful Sanity run #${RUN_NUMBER}."
