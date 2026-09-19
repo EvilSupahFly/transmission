@@ -899,7 +899,6 @@ jobs:
           cat > /etc/apt/sources.list <<'EOF'
           deb http://archive.debian.org/debian bullseye main
           deb http://archive.debian.org/debian bullseye-updates main
-          deb http://archive.debian.org/debian-security bullseye-security main
           EOF
 
           # Debian slim images may contain a deb822 source file as well.
