@@ -93,11 +93,35 @@ jobs:
         working-directory: src
         run: dpkg-buildpackage -us -uc -b
 
+      - name: Upload .deb packages as workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-packages
+          path: '*.deb'
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish packages to GitHub Release
+    needs:
+      - check-and-sync
+      - build
+    if: needs.check-and-sync.outputs.should_build == 'true' && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    env:
+      NEW_VERSION: ${{ needs.check-and-sync.outputs.new_version }}
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deb-packages
+          path: release-assets
+
       - name: Publish build output as a GitHub Release on the fork
         env:
           GH_TOKEN: ${{ secrets.PAT_WITH_WORKFLOWS }}
         run: |
-          gh release create "${NEW_VERSION}" ./*.deb \
+          gh release create "$NEW_VERSION" release-assets/*.deb \
             --repo "${{ github.repository }}" \
             --title "transmission ${NEW_VERSION} (local Mint build)" \
             --notes "Automated local .deb build for upstream release ${NEW_VERSION}."
