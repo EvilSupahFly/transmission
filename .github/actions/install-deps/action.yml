@@ -143,7 +143,7 @@ runs:
             BASE_PACKAGES+=(gdb libc6-dbg valgrind)
           fi
 
-          $SUDO_CMD apt-get install -y --no-install-recommends "${BASE_PACKAGES[@]}"
+          $SUDO_CMD apt-get install -y --allow-downgrades --no-install-recommends --no-install-recommends --allow-downgrades "${BASE_PACKAGES[@]}"
 
           # Setup UTF-8 locale for Qt builds
           if [[ "${{ inputs.enable-qt }}" != "false" ]]; then

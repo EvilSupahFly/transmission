@@ -897,8 +897,8 @@ jobs:
         if: ${{ matrix.use-legacy-packages }}
         run: |
           cat > /etc/apt/sources.list <<'EOF'
-          deb http://archive.debian.org/debian bullseye main
-          deb http://archive.debian.org/debian bullseye-updates main
+          deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20240531T143744Z bullseye main
+          deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20240531T143744Z bullseye-updates main
           EOF
 
           # Debian slim images may contain a deb822 source file as well.
