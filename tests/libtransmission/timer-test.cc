@@ -143,7 +143,7 @@ TEST_F(TimerTest, singleShotHonorsInterval)
 
     // confirm that it kicked at the right interval
     EXPECT_TRUE(called);
-    expectSingleShotInterval(Interval, AsMSec(end_time - begin_time));
+    expectInterval(Interval, AsMSec(end_time - begin_time));
 }
 
 TEST_F(TimerTest, repeatingHonorsInterval)
