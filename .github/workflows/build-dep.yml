@@ -55,7 +55,7 @@ jobs:
       NEW_VERSION: ${{ needs.check-and-sync.outputs.new_version }}
     steps:
       - name: Checkout upstream source at the release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: transmission/transmission
           ref: ${{ env.NEW_VERSION }}
@@ -63,7 +63,7 @@ jobs:
           path: src
 
       - name: Checkout persistent debian/ overlay
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: debian-packaging
           path: overlay
@@ -94,7 +94,7 @@ jobs:
         run: dpkg-buildpackage -us -uc -b
 
       - name: Upload .deb packages as workflow artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: deb-packages
           path: '*.deb'
@@ -112,7 +112,7 @@ jobs:
       NEW_VERSION: ${{ needs.check-and-sync.outputs.new_version }}
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: deb-packages
           path: release-assets
