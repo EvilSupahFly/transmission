@@ -10,15 +10,7 @@ permissions:
 
 jobs:
   check-and-sync:
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    runs-on: ubuntu-latest
-=======
     runs-on: ubuntu-24.04
->>>>>>> Stashed changes
-=======
-    runs-on: ubuntu-24.04
->>>>>>> Stashed changes
     outputs:
       new_version: ${{ steps.check.outputs.new_version }}
       should_build: ${{ steps.check.outputs.should_build }}
